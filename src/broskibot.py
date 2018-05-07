@@ -24,6 +24,10 @@ async def on_message(message):
     # log messages
     log.log(message)
 
+    # private message test
+    if message.content.startswith("!secret"):
+        await client.send_message(message.author, "OwO")
+
     # check for and send responses
     bot_msg = replies.getreply(message)
     for m in bot_msg:
