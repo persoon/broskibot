@@ -13,7 +13,7 @@ def log(message):
 
     # log each message with time + the authors discord id + the message
     # example: 2018-05-06 18:13:19 <@95573075541622784> "test"
-    # a blank message.content probably means a message was deleted
+    # a blank message.content might mean a message was deleted or is an image etc
     log_msg = time + " " + "{0.author.mention}".format(message) + " \"" + message.content + "\""
 
     # print to console
@@ -22,5 +22,5 @@ def log(message):
     # write to the logfile
     chat_log.write(str(log_msg)+"\n")
 
-    # close the file so it saves
+    # close logfile and save to disk
     chat_log.close()

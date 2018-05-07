@@ -1,12 +1,8 @@
 import random
-import discord
-import asyncio
 from src import Parameters
-client = Parameters.Parameters.client
-# For now any message that requires multiple replies has to go in broskibot.py
-# I'll think about how to handle them in here later
 
-# if tagging the user you MUST end the reply with .format(message)
+# get the borg client from broskibot
+client = Parameters.Parameters.client
 
 
 class Replies:
@@ -16,12 +12,16 @@ class Replies:
     def getreply(self, message):
         self.count += 1
         print('messages received: ', self.count)
-        # Say hi
+
+        """
+        Start commands
+        """
         if message.content.startswith("!hello"):
             # say hi back, tagging the user
             rat = "Hello {0.author.mention}"
             return [rat]
         elif message.content.startswith("!roulette"):
+            # 1 in 6 chance to dome yourself
             rat = ["A gun is placed to {0.author.mention}'s head."]
             num = random.randint(1, 6)
             if num == 4:
@@ -32,8 +32,8 @@ class Replies:
         elif message.content.startswith("!roll"):
             # !roll 321d123
             msg = message.content
-            str_split = msg.split()
-            dice = str_split[1]
+            msg_split = msg.split()
+            dice = msg_split[1]
             left, right = dice.split("d")
             total = 0
             val = "("
@@ -46,8 +46,5 @@ class Replies:
             reply = val + ") Total: " + str(total)
             return [reply]
         else:
-            # return -1 if we don't need to reply to the message
             print("It doesn't look like anything to me..")
             return [None]
-
-
