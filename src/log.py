@@ -1,7 +1,7 @@
 from datetime import datetime
 
 # file to log messages to
-log_file = "chatlog.txt"
+log_file = "../private/chatlog.txt"
 
 
 def log(message):

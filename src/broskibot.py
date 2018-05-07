@@ -3,13 +3,18 @@ import random
 import discord
 from ignore import token as Token
 from src import log
-from src import replies
+from src import Replies
+from src import Parameters
+
 
 # secret token for broskibot
 token = Token.token
 
 # create the link to discord
 client = discord.Client()
+Parameters.Parameters.client = client
+replies = Replies.Replies()
+
 
 @client.event
 async def on_message(message):
@@ -20,24 +25,15 @@ async def on_message(message):
     # log chat
     log.log(message)
 
-    # parse multiple response replies here for now
-    # think of a way to do this even with replies.py
-    if message.content.startswith("!roulette"):
-        reply = "A gun is placed to {0.author.mention}'s head.".format(message)
-        await client.send_message(message.channel, reply)
-        num = random.randint(1, 6)
-        if num == 4:
-            reply = "The trigger is pulled and {0.author.mention} lies dead in the chat.".format(message)
-        else:
-            reply = "The gun clicks and {0.author.mention} lives to see another day.".format(message)
-        await client.send_message(message.channel, reply)
+    bot_msg = replies.getreply(message)
+    for m in bot_msg:
+        if m is not None:
+            await client.send_message(message.channel, m.format(message))
 
+    # parse multiple response replies here for now
     # parse single reply messages here
-    # replies.py will return a -1 if it has no response
-    reply = replies.getreply(message)
-    # if we don't get a -1 (if we have something to say) send the message
-    if reply != -1:
-        await client.send_message(message.channel, reply)
+    # Replies.py will return a -1 if it has no response
+
 
 
 @client.event
