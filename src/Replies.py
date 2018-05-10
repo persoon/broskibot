@@ -1,9 +1,5 @@
 import random
-from ignore import Parameters
 from src import Game
-
-# get the borg client from broskibot
-client = Parameters.Parameters.client
 
 # create game client
 game = Game.Game()

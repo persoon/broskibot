@@ -36,7 +36,11 @@ async def on_message(message):
     bot_msg = replies.getreply(message)
     for m in bot_msg:
         if m is not None:
-            await client.send_message(message.channel, m.format(message))
+            if isinstance(m, str):
+                await client.send_message(message.channel, m.format(message))
+            else:  # private messages are sent as a tuple: (author, msg)
+                await client.send_message(m[0], m[1].format(message))
+
 
 
 @client.event
