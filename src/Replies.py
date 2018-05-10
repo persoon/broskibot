@@ -1,8 +1,12 @@
 import random
-from src import Parameters
+from ignore import Parameters
+from src import Game
 
 # get the borg client from broskibot
 client = Parameters.Parameters.client
+
+# create game client
+game = Game.Game()
 
 
 class Replies:
@@ -11,7 +15,14 @@ class Replies:
 
     def getreply(self, message):
         self.count += 1
-        print('messages received: ', self.count)
+        print('### Messages received: ', self.count)
+
+        # Chat sent in the 'game' channel are sent to Game.py
+        # Other commands will not work in the game channel - good or bad thing?
+        # MUST receive an array/list
+        if str(message.channel) == "game":
+            reply = game.getmessage(message)
+            return reply
 
         """
         Start commands
@@ -54,5 +65,5 @@ class Replies:
                     "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
             return [random.choice(coke)]
         else:
-            print("It doesn't look like anything to me..")
+            print("### It doesn't look like anything to me..")
             return [None]

@@ -11,10 +11,14 @@ def log(message):
     # get the current time, formatted
     time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    # log each message with time + the authors discord id + the message
-    # example: 2018-05-06 18:13:19 <@95573075541622784> "test"
-    # a blank message.content might mean a message was deleted or is an image etc
-    log_msg = time + " " + "{0.author.mention}".format(message) + " \"" + message.content + "\""
+    # log each message with date + time + author + author id + channel + message
+    # example: 2018-05-06 18:13:19 Name#1234 <@95573075541622784> "game" "test"
+    # a blank message.content might mean a message was deleted or is an image etc.
+    log_msg = time + " "
+    log_msg += str(message.author) + " "
+    log_msg += "{0.author.mention}".format(message) + " "
+    log_msg += "\"" + str(message.channel) + "\" "
+    log_msg += "\"" + message.content + "\""
 
     # print to console
     print(str(log_msg))
