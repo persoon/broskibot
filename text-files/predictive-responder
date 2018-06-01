@@ -1,0 +1,16 @@
+Markov predictive text module
+by BanandySwoles
+
+concept:
+    generate simulated comments from users based on past chat history
+
+steps:
+    1. Get user's chat history
+        a. log server's chat history
+        b. parse and separate individual users
+        c. pre-hoc analysis of text? (maybe?)
+    2. User issues command
+        a. get command
+        b. do markov functions
+    3. Respond
+        a. duh
