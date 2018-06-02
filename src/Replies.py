@@ -1,5 +1,6 @@
 import random
 from src import Game
+import glob
 
 # create game client
 game = Game.Game()
@@ -60,6 +61,22 @@ class Replies:
                     "Cannot predict now", "Concentrate and ask again", "Don't count on it",
                     "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
             return [random.choice(coke)]
+        elif message.content.startswith("!create"):
+            msg = message.content
+            msg_split = msg.split()
+            if len(msg_split) == 3:
+                cmd_name = msg_split[1]
+                cmd_response = msg_split[2]
+                cmd_file = "../commands/commands.txt"
+                # TODO: save command to file, return confirm message
+            return [None]
+        elif message.content.startswith("!neckbeard"):
+            image_dir = "C:/Users/aaron/Desktop/broskibot-git/images/Neckbeards"
+            images = []
+            for f in glob.glob(image_dir + "/*"):
+                images.append(f)
+            num = random.randint(0, len(images) - 1)
+            return [images[num]]
         else:
             print("### It doesn't look like anything to me..")
             return [None]

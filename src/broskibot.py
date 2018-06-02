@@ -1,4 +1,5 @@
 import discord
+import random
 from src import log
 from src import Replies
 from ignore import token as Token
@@ -32,8 +33,22 @@ async def on_message(message):
     if message.content.startswith("!secret"):
         await client.send_message(message.author, "OwO")
 
+    # TODO: change this
+    # trigger chris
+    if str(message.author) == "Wiggles#3214":
+        n = random.randint(1, 3)
+        if n == 1:
+            await client.send_message(message.channel, "{0.author.mention} YoUr MoM gOeS tO cOlLeGe".format(message))
+
     # check for and send responses
     bot_msg = replies.getreply(message)
+
+    # TODO: change this
+    # check for image
+    if message.content.startswith("!neckbeard"):
+        await client.send_file(message.channel, bot_msg[0], filename=None, content=None, tts=False)
+        return
+
     for m in bot_msg:
         if m is not None:
             if isinstance(m, str):
