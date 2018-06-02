@@ -1,9 +1,13 @@
 import random
 import numpy as np
-from src import Parameters
+from src import Game
+
+# create game client
+game = Game.Game()
+
 
 # get the borg client from broskibot
-client = Parameters.Parameters.client
+# client = Parameters.Parameters.client
 
 
 class Replies:
@@ -13,6 +17,13 @@ class Replies:
     def getreply(self, message):
         self.count += 1
         print('messages received: ', self.count)
+
+        # Chat sent in the 'game' channel are sent to Game.py
+        # Other commands will not work in the game channel - good or bad thing?
+        # MUST receive an array/list
+        if str(message.channel) == "game":
+            reply = game.getmessage(message)
+            return reply
 
         """
         Start commands
@@ -57,7 +68,6 @@ class Replies:
 
         elif message.content.startswith("!trump"):
             trump = open('../text-files/speeches.txt', encoding='utf8').read()
-
             corpus = trump.split()
 
             def make_pairs(corpus):
@@ -65,30 +75,21 @@ class Replies:
                     yield (corpus[i], corpus[i + 1])
 
             pairs = make_pairs(corpus)
-
             word_dict = {}
-
             for word_1, word_2 in pairs:
                 if word_1 in word_dict.keys():
                     word_dict[word_1].append(word_2)
                 else:
                     word_dict[word_1] = [word_2]
-
             first_word = np.random.choice(corpus)
-
             while first_word.islower():
                 first_word = np.random.choice(corpus)
-
             chain = [first_word]
-
             n_words = 5
-
             for i in range(n_words):
                 chain.append(np.random.choice(word_dict[chain[-1]]))
-
             speech = ' '.join(chain)
             return [speech]
-
         elif message.content.startswith("!create"):
             msg = message.content
             msg_split = msg.split()
