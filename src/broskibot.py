@@ -3,6 +3,7 @@ import random
 from src import log
 from src import Replies
 from ignore import token as Token
+import logging
 
 # secret token for broskibot
 token = Token.token
@@ -68,6 +69,8 @@ async def on_ready():
     #    print(i.name)
     # print('------')
 
+# start logging
+logging.basicConfig(level=logging.INFO)
 
 # start the bot
 client.run(token)

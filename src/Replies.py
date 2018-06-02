@@ -1,6 +1,7 @@
 import random
 import numpy as np
 from src import Game
+import glob
 
 # create game client
 game = Game.Game()
