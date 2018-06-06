@@ -23,6 +23,9 @@ async def on_message(message):
     # we do not want the bot to reply to itself
     if message.author == client.user:
         return
+    # do not reply to other bots
+    if message.author.bot:
+        return
 
     # log messages
     print('------')

@@ -6,6 +6,7 @@ import glob
 # create game client
 game = Game.Game()
 
+cmd_file = "../private/replies.txt"
 
 # get the borg client from broskibot
 # client = Parameters.Parameters.client
@@ -66,7 +67,6 @@ class Replies:
                     "Cannot predict now", "Concentrate and ask again", "Don't count on it",
                     "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
             return [random.choice(coke)]
-
         elif message.content.startswith("!trump"):
             trump = open('../text-files/speeches.txt', encoding='utf8').read()
             corpus = trump.split()
@@ -92,14 +92,18 @@ class Replies:
             speech = ' '.join(chain)
             return [speech]
         elif message.content.startswith("!create"):
+            # takes in a command and response pair
+            # "!create foo bar" would auto respond to "foo" with "bar"
+            # TODO: check for duplicates, remove commands.. only works if the msg is JUST the command
             msg = message.content
             msg_split = msg.split()
-            if len(msg_split) == 3:
-                cmd_name = msg_split[1]
-                cmd_response = msg_split[2]
-                cmd_file = "../commands/commands.txt"
-                # TODO: save command to file, return confirm message
-            return [None]
+            if len(msg_split) >= 3:
+                with open(cmd_file, 'a') as the_file:
+                    the_file.write(msg_split[1] + " | ")
+                    for a in msg_split[2:]:
+                        the_file.write(a + " ")
+                    the_file.write("\n")
+            return ["Command " + msg_split[1] + " created!"]
         elif message.content.startswith("!neckbeard"):
             image_dir = "C:/Users/aaron/Desktop/broskibot-git/images/Neckbeards"
             images = []
@@ -108,5 +112,17 @@ class Replies:
             num = random.randint(0, len(images) - 1)
             return [images[num]]
         else:
+            # check through replies.txt
+            mstr = str(message.content)
+            cmds = []
+            with open(cmd_file) as f:
+                lines = f.readlines()
+            for b in lines:
+                mstr_split = b.split("|")
+                cmds.append([mstr_split[0].strip(), mstr_split[1].strip()])
+            for a in cmds:
+                if mstr == a[0]:
+                    return [a[1]]
+            # no response
             print("It doesn't look like anything to me..")
             return [None]
