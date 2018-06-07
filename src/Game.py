@@ -5,6 +5,9 @@ import random
 # The person who starts the game with !start is the Leader (players[0])
 # leader can issue commands such as resetgame
 
+# command prefix
+prefix = "!"
+
 
 class Game:
     def __init__(self):
@@ -21,9 +24,10 @@ class Game:
         self.known = False  # Does hitler know who fascists are? True/False
 
     def getmessage(self, message):
+        msg = message.content
         reply = []
         author = message.author  # author = Name#1234
-        if message.content.startswith("!start"):
+        if msg.startswith(prefix + "start"):
             if self.gamestate:  # ignore if game is started
                 return [None]
             print("### Game has started")
@@ -32,10 +36,10 @@ class Game:
             self.join(author)
             reply.append("Game has started! Players please type \"!join\" to join the game.")
             return reply
-        elif message.content.startswith("!join"):
+        elif msg.startswith(prefix + "join"):
             if self.gamestate:  # ignore if game is not started
                 return self.join(author)
-        elif message.content.startswith("!actuallystart"):
+        elif msg.startswith(prefix + "actuallystart"):
             # start handing out roles and cards and shit
             self.role_select()
             for r in self.roles:
@@ -44,10 +48,10 @@ class Game:
                 # if author == self.leader:
                     # show getcurrentplayers(), start the game? will need new boolean?
             return reply
-        elif message.content.startswith("!players") or message.content.startswith("!headcount"):
+        elif msg.startswith(prefix + "players") or msg.startswith(prefix + "headcount"):
             if self.gamestate:  # game is not started -- ignore
                 return self.getplayers()
-        elif message.content.startswith("!resetgame"):
+        elif msg.startswith(prefix + "resetgame"):
             if self.gamestate:  # ignore if game is not started
                 if author == self.leader:  # only reset game if they are the Leader
                     self.resetgame()
@@ -55,7 +59,6 @@ class Game:
         else:
             return [None]
 
-    # TODO: keep track of author ID behind the scenes (in case two players have same username)
     def join(self, author):
         reply = []
         for i in self.players:  # ignore if player has already joined

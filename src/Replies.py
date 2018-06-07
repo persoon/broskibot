@@ -6,10 +6,15 @@ import glob
 # create game client
 game = Game.Game()
 
+# file to store custom commands
 cmd_file = "../private/replies.txt"
+lenny_file = "../text-files/lenny.txt"
 
 # get the borg client from broskibot
 # client = Parameters.Parameters.client
+
+# command prefix
+prefix = "!"
 
 
 class Replies:
@@ -17,6 +22,7 @@ class Replies:
         self.count = 0
 
     def getreply(self, message):
+        msg = message.content
         self.count += 1
         print('messages received: ', self.count)
 
@@ -30,11 +36,11 @@ class Replies:
         """
         Start commands
         """
-        if message.content.startswith("!hello"):
+        if msg.startswith(prefix + "hello"):
             # say hi back, tagging the user
             rat = "Hello {0.author.mention}"
             return [rat]
-        elif message.content.startswith("!roulette"):
+        elif msg.startswith(prefix + "roulette"):
             # 1 in 6 chance to dome yourself
             rat = ["A gun is placed to {0.author.mention}'s head."]
             num = random.randint(1, 6)
@@ -43,7 +49,7 @@ class Replies:
             else:
                 rat.append("The gun clicks and {0.author.mention} lives to see another day.")
             return rat
-        elif message.content.startswith("!roll"):
+        elif msg.startswith(prefix + "roll"):
             # !roll 321d123
             msg = message.content
             msg_split = msg.split()
@@ -59,7 +65,7 @@ class Replies:
                 total += rng
             reply = val + ") Total: " + str(total)
             return [reply]
-        elif message.content.startswith("!8ball"):
+        elif msg.startswith(prefix + "8ball"):
             coke = ["It is certain", "It is decidedly so", "Without a doubt",
                     "Yes definitely", "You may rely on it", "As I see it, yes",
                     "Most likely", "Outlook good", "Yes", "Signs point to yes",
@@ -67,7 +73,7 @@ class Replies:
                     "Cannot predict now", "Concentrate and ask again", "Don't count on it",
                     "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
             return [random.choice(coke)]
-        elif message.content.startswith("!trump"):
+        elif msg.startswith(prefix + "trump"):
             trump = open('../text-files/speeches.txt', encoding='utf8').read()
             corpus = trump.split()
 
@@ -91,7 +97,7 @@ class Replies:
                 chain.append(np.random.choice(word_dict[chain[-1]]))
             speech = ' '.join(chain)
             return [speech]
-        elif message.content.startswith("!create"):
+        elif msg.startswith(prefix + "create"):
             # takes in a command and response pair
             # "!create foo bar" would auto respond to "foo" with "bar"
             # TODO: check for duplicates, remove commands.. only works if the msg is JUST the command
@@ -104,13 +110,18 @@ class Replies:
                         the_file.write(a + " ")
                     the_file.write("\n")
             return ["Command " + msg_split[1] + " created!"]
-        elif message.content.startswith("!neckbeard"):
+        elif msg.startswith(prefix + "neckbeard"):
             image_dir = "C:/Users/aaron/Desktop/broskibot-git/images/Neckbeards"
             images = []
             for f in glob.glob(image_dir + "/*"):
                 images.append(f)
             num = random.randint(0, len(images) - 1)
             return [images[num]]
+        elif msg.startswith(prefix + "lenny"):
+            with open(lenny_file) as f:
+                lines = f.readlines()
+            face = random.randint(0,len(lines))
+            return [lines[face]]
         else:
             # check through replies.txt
             mstr = str(message.content)
