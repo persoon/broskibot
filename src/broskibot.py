@@ -33,6 +33,37 @@ async def on_message(message):
     print("### Channel: " + str(message.channel))
     log.log(message)
 
+    if message.content.startswith("!owo"):
+        counter = 0
+        stop = 1 # how many messages back do you wanna go? 0 is gonna be "!owo"
+        #      ^ so 1 will be the message before -- what we wanna owo-fy
+        async for message in client.logs_from(message.channel, limit=stop+1):
+            print(message.content)
+            if counter == stop:
+                faces = ["(・`ω´・)", ";;w;;", "owo", "UwU", ">w<", "^w^"]
+                owo = message.content.format(message)
+                owo = owo.replace("r", "w").replace("R", "W")
+                owo = owo.replace("l", "w").replace("L", "W")
+                owo = owo.replace("na", "ny")
+                owo = owo.replace("ne", "ny")
+                owo = owo.replace("ni", "ny")
+                owo = owo.replace("no", "ny")
+                owo = owo.replace("nu", "ny")
+                owo = owo.replace("Na", "Ny")
+                owo = owo.replace("Ne", "Ny")
+                owo = owo.replace("Ni", "Ny")
+                owo = owo.replace("No", "Ny")
+                owo = owo.replace("Nu", "Ny")
+                owo = owo.replace("NA", "NY")
+                owo = owo.replace("NE", "NY")
+                owo = owo.replace("NI", "NY")
+                owo = owo.replace("NO", "NY")
+                owo = owo.replace("NU", "NY")
+                r = random.randint(0, len(faces))
+                await client.send_message(message.channel, owo + " " + faces[r])
+                return
+            counter += 1
+
     # private message test
     if message.content.startswith("!secret"):
         await client.send_message(message.author, "OwO")
@@ -71,6 +102,7 @@ async def on_ready():
     # for i in members:
     #    print(i.name)
     # print('------')
+
 
 # start logging
 logging.basicConfig(level=logging.INFO)
